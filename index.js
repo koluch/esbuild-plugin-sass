@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const sass = require('sass');
 const util = require('util');
 const tmp = require('tmp');
@@ -6,6 +6,7 @@ const path = require('path');
 
 const sassRender = util.promisify(sass.render);
 const createTempDir = util.promisify(tmp.dir);
+const writeFile = util.promisify(fs.writeFile);
 
 module.exports = {
   name: 'sass',
@@ -19,7 +20,7 @@ module.exports = {
 
       const tmpDirPath = await createTempDir();
       const tmpFilePath = path.resolve(tmpDirPath, `${baseFileName}.css`);
-      await fs.writeFile(tmpFilePath, sassBuildResult.css);
+      await writeFile(tmpFilePath, sassBuildResult.css);
 
       return {
         path: tmpFilePath
