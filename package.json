@@ -6,7 +6,11 @@
   "scripts": {
     "test": "tape tests/*.js | tap-spec"
   },
-  "author": "Nikolai Mavrenkov",
+  "author": {
+    "name": "Nikolai Mavrenkov",
+    "email": "koluch@koluch.ru",
+    "url": "koluch.ru"
+  },
   "license": "ISC",
   "dependencies": {
     "sass": "^1.32.4",
