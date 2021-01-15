@@ -4,7 +4,7 @@
   "description": "Plugin for esbuild to support SASS styles",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape tests/*.js | tap-spec"
   },
   "author": "Nikolai Mavrenkov",
   "license": "ISC",
@@ -13,6 +13,9 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "esbuild": "^0.8.32"
+    "esbuild": "^0.8.32",
+    "fs-extra": "^9.0.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.1.1"
   }
 }
