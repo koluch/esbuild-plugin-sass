@@ -1,0 +1,29 @@
+const fs = require('fs').promises;
+const sass = require('sass');
+const util = require('util');
+const tmp = require('tmp');
+const path = require('path');
+
+const sassRender = util.promisify(sass.render);
+const createTempDir = util.promisify(tmp.dir);
+
+module.exports = {
+  name: 'sass',
+  setup: function (build) {
+    build.onResolve({ filter: /.\.(scss|sass)$/, namespace: 'file'}, async (args) => {
+      const fullFileName = path.resolve(args.resolveDir, args.path);
+      const fileExt = path.extname(fullFileName)
+      const baseFileName = path.basename(fullFileName, fileExt)
+
+      const sassBuildResult = await sassRender({file: fullFileName});
+
+      const tmpDirPath = await createTempDir();
+      const tmpFilePath = path.resolve(tmpDirPath, `${baseFileName}.css`);
+      await fs.writeFile(tmpFilePath, sassBuildResult.css);
+
+      return {
+        path: tmpFilePath
+      };
+    })
+  },
+}

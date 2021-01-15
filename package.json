@@ -1,0 +1,18 @@
+{
+  "name": "esbuild-sass-plugin",
+  "version": "1.0.0",
+  "description": "Plugin for esbuild to support SASS styles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nikolai Mavrenkov",
+  "license": "ISC",
+  "dependencies": {
+    "sass": "^1.32.4",
+    "tmp": "^0.2.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.8.32"
+  }
+}
