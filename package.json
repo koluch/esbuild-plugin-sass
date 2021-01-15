@@ -12,6 +12,11 @@
     "url": "koluch.ru"
   },
   "license": "ISC",
+  "keywords": [
+    "esbuild",
+    "sass",
+    "plugin"
+  ],
   "dependencies": {
     "sass": "^1.32.4",
     "tmp": "^0.2.1"
@@ -19,7 +24,20 @@
   "devDependencies": {
     "esbuild": "^0.8.32",
     "fs-extra": "^9.0.1",
+    "husky": "^4.3.7",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
     "tap-spec": "^5.0.0",
     "tape": "^5.1.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npx prettier --write"
+    ]
   }
 }
