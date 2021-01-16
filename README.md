@@ -24,7 +24,7 @@ body {
 
 Create file `src/index.js`:
 
-```
+```js
 import './test.scss'
 ```
 
