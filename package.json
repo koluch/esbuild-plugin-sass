@@ -1,6 +1,6 @@
 {
   "name": "esbuild-plugin-sass",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Plugin for esbuild to support SASS styles",
   "main": "index.js",
   "scripts": {
@@ -13,8 +13,8 @@
   },
   "license": "ISC",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/koluch/esbuild-plugin-sass.git"
+    "type": "git",
+    "url": "https://github.com/koluch/esbuild-plugin-sass.git"
   },
   "keywords": [
     "esbuild",
