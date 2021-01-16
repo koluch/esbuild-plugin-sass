@@ -1,13 +1,13 @@
-# esbuild-sass-plugin
+# esbuild-plugin-sass
 
-![Node.js CI](https://github.com/koluch/esbuild-sass-plugin/workflows/Node.js%20CI/badge.svg)
+![Node.js CI](https://github.com/koluch/esbuild-plugin-sass/workflows/Node.js%20CI/badge.svg)
 
 Plugin for [esbuild](https://esbuild.github.io/) to support SASS styles
 
 ## Install
 
 ```bash
-npm i esbuild esbuild-sass-plugin
+npm i esbuild esbuild-plugin-sass
 ```
 
 ## Usage example
@@ -33,7 +33,7 @@ Create file `build.js`:
 
 ```js
 const esbuild = require('esbuild');
-const sassPlugin = require('esbuild-sass-plugin')
+const sassPlugin = require('esbuild-plugin-sass')
 
 esbuild.build({
     entryPoints: ['src/index.js'],
