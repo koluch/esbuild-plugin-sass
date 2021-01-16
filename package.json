@@ -12,10 +12,14 @@
     "url": "koluch.ru"
   },
   "license": "ISC",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/koluch/esbuild-plugin-sass.git"
+  },
   "keywords": [
     "esbuild",
-    "sass",
-    "plugin"
+    "plugin",
+    "sass"
   ],
   "dependencies": {
     "sass": "^1.32.4",
