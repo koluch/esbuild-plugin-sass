@@ -26,6 +26,9 @@
     "sass": "^1.32.4",
     "tmp": "^0.2.1"
   },
+  "peerDependencies": {
+    "esbuild": "^0.8.32"
+  },
   "devDependencies": {
     "esbuild": "^0.8.32",
     "husky": "^4.3.7",
