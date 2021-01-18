@@ -22,12 +22,12 @@
     "sass"
   ],
   "dependencies": {
+    "fs-extra": "^9.0.1",
     "sass": "^1.32.4",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
     "esbuild": "^0.8.32",
-    "fs-extra": "^9.0.1",
     "husky": "^4.3.7",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
