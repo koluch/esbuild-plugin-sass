@@ -39,7 +39,7 @@ esbuild.build({
     entryPoints: ['src/index.js'],
     bundle: true,
     outfile: 'bundle.js',
-    plugins: [sassPlugin],
+    plugins: [sassPlugin()],
 }).catch((e) => console.error(e.message))
 ```
 
