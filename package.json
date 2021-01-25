@@ -1,6 +1,6 @@
 {
   "name": "esbuild-plugin-sass",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Plugin for esbuild to support SASS styles",
   "main": "index.js",
   "scripts": {
