@@ -16,7 +16,7 @@ Create file `src/test.scss`:
 
 ```scss
 body {
-  &.red {
+  &.isRed {
     background: red;
   }
 }
