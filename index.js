@@ -18,6 +18,14 @@ module.exports = (options = {}) => ({
       { filter: /.\.(scss|sass)$/, namespace: "file" },
       async (args) => {
         const sourceFullPath = path.resolve(args.resolveDir, args.path);
+
+        // import 'file.scss' assumed .js extension
+        if(!fs.existsSync(sourceFullPath) && fs.existsSync(sourceFullPath + ".js")) {
+          return {
+            path: sourceFullPath + ".js",
+          };
+        }
+
         const sourceExt = path.extname(sourceFullPath);
         const sourceBaseName = path.basename(sourceFullPath, sourceExt);
         const sourceDir = path.dirname(sourceFullPath);
