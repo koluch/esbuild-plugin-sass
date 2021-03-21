@@ -1,0 +1,14 @@
+@import "dep_sass";
+@import "./dep_sass";
+@import "./dep_sass.scss";
+@import "dep_css";
+@import "./dep_css";
+@import "./dep_css.css";
+@import url("./dep_css.css");
+@import url("dep_css.css");
+
+body {
+  &.isRed {
+    background: red;
+  }
+}

@@ -49,21 +49,28 @@ async function replaceUrls(css, newCssFileName, sourceDir, rootDir) {
 
   csstree.walk(ast, {
     enter(node) {
+      // Special case for import, since it supports raw strings as url
+      if (node.type === "Atrule" && node.name === "import") {
+        if (!node.prelude.children.isEmpty()) {
+          const urlNode = node.prelude.children.head.data;
+          if (urlNode.type === "String") {
+            const normalizedUrl =
+              urlNode.type === "String"
+                ? normalizeQuotes(urlNode.value)
+                : urlNode.value;
+            if (isLocalFileUrl(normalizedUrl)) {
+              const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);
+              const relativePath = path.relative(newCssFileName, resolved.file);
+              urlNode.value = `"${relativePath}"`;
+            }
+          }
+        }
+      }
       if (node.type === "Url") {
         const value = node.value;
-        const stringValue = value.value;
 
-        let normalizedUrl;
-        if (value.type === "String") {
-          const match = stringValue.match(/^['"](.*)["']$/s);
-          if (match) {
-            normalizedUrl = match[1];
-          } else {
-            normalizedUrl = stringValue;
-          }
-        } else {
-          normalizedUrl = stringValue;
-        }
+        const normalizedUrl =
+          value.type === "String" ? normalizeQuotes(value.value) : value.value;
 
         if (isLocalFileUrl(normalizedUrl)) {
           const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);
@@ -96,6 +103,11 @@ function isLocalFileUrl(url) {
   }
 
   return true;
+}
+
+function normalizeQuotes(stringValue) {
+  const match = stringValue.match(/^['"](.*)["']$/s);
+  return match ? match[1] : stringValue;
 }
 
 function resolveUrl(url, originalFolder, rootDir) {
