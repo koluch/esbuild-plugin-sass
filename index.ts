@@ -1,18 +1,22 @@
-const fs = require("fs-extra");
-const sass = require("sass");
-const util = require("util");
-const tmp = require("tmp");
-const path = require("path");
-const csstree = require("css-tree");
+import { Plugin } from "esbuild";
+import { CssNode } from "css-tree";
+import fs = require("fs-extra");
+import sass = require("sass");
+import util = require("util");
+import tmp = require("tmp");
+import path = require("path");
+import csstree = require("css-tree");
 
 const sassRender = util.promisify(sass.render);
-const writeFile = util.promisify(fs.writeFile);
-const ensureDir = util.promisify(fs.ensureDir);
 
-module.exports = (options = {}) => ({
+interface Options {
+  rootDir?: string;
+}
+
+export = (options: Options = {}): Plugin => ({
   name: "sass",
   setup: function (build) {
-    const { rootDir = options.rootDir || process.cwd() } = options;
+    const { rootDir = process.cwd() } = options;
     const tmpDirPath = tmp.dirSync().name;
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
@@ -25,7 +29,7 @@ module.exports = (options = {}) => ({
 
         const tmpDir = path.resolve(tmpDirPath, sourceRelDir);
         const tmpFilePath = path.resolve(tmpDir, `${sourceBaseName}.css`);
-        await ensureDir(tmpDir);
+        await fs.ensureDir(tmpDir);
 
         // Compile SASS to CSS
         let css = (await sassRender({ file: sourceFullPath })).css.toString();
@@ -34,7 +38,7 @@ module.exports = (options = {}) => ({
         css = await replaceUrls(css, tmpFilePath, sourceDir, rootDir);
 
         // Write result file
-        await writeFile(tmpFilePath, css);
+        await fs.writeFile(tmpFilePath, css);
 
         return {
           path: tmpFilePath,
@@ -44,20 +48,27 @@ module.exports = (options = {}) => ({
   },
 });
 
-async function replaceUrls(css, newCssFileName, sourceDir, rootDir) {
+async function replaceUrls(
+  css: string,
+  newCssFileName: string,
+  sourceDir: string,
+  rootDir: string
+): Promise<string> {
   const ast = csstree.parse(css);
 
   csstree.walk(ast, {
-    enter(node) {
+    enter(node: CssNode) {
       // Special case for import, since it supports raw strings as url
-      if (node.type === "Atrule" && node.name === "import") {
+      if (
+        node.type === "Atrule" &&
+        node.name === "import" &&
+        node.prelude != null &&
+        node.prelude.type === "AtrulePrelude"
+      ) {
         if (!node.prelude.children.isEmpty()) {
-          const urlNode = node.prelude.children.head.data;
-          if (urlNode.type === "String") {
-            const normalizedUrl =
-              urlNode.type === "String"
-                ? normalizeQuotes(urlNode.value)
-                : urlNode.value;
+          const urlNode = node.prelude.children.first();
+          if (urlNode != null && urlNode.type === "String") {
+            const normalizedUrl = normalizeQuotes(urlNode.value);
             if (isLocalFileUrl(normalizedUrl)) {
               const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);
               const relativePath = path.relative(newCssFileName, resolved.file);
@@ -91,7 +102,7 @@ async function replaceUrls(css, newCssFileName, sourceDir, rootDir) {
   return csstree.generate(ast);
 }
 
-function isLocalFileUrl(url) {
+function isLocalFileUrl(url: string): boolean {
   if (/^https?:\/\//i.test(url)) {
     return false;
   }
@@ -105,13 +116,26 @@ function isLocalFileUrl(url) {
   return true;
 }
 
-function normalizeQuotes(stringValue) {
+function normalizeQuotes(stringValue: string): string {
   const match = stringValue.match(/^['"](.*)["']$/s);
-  return match ? match[1] : stringValue;
+  return match != null ? match[1] ?? "" : stringValue;
 }
 
-function resolveUrl(url, originalFolder, rootDir) {
-  const [_, pathname, query, hash] = url.match(/^(.*?)(\?.*?)?(#.*?)?$/);
+function resolveUrl(
+  url: string,
+  originalFolder: string,
+  rootDir: string
+): {
+  file: string;
+  pathname: string;
+  query: string;
+  hash: string;
+} {
+  const match = url.match(/^(.*?)(\?.*?)?(#.*?)?$/);
+  if (match == null) {
+    throw new Error(`Unable to parse url: ${url}`);
+  }
+  const [_, pathname = "", query, hash] = match;
 
   let file = "";
   if (pathname.startsWith("/")) {
