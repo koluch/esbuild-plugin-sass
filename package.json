@@ -8,7 +8,8 @@
     "all": "npm-run-all --serial --print-label",
     "build": "tsc",
     "test:unit": "tape 'tests/*.js'",
-    "test": "npm run all build test:*"
+    "test": "npm run all build test:*",
+    "prepare": "npm run build"
   },
   "author": {
     "name": "Nikolai Mavrenkov",
