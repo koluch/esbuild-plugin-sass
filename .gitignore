@@ -1,2 +1,5 @@
 node_modules
 .output
+index.js
+index.d.ts
+index.d.ts.map
