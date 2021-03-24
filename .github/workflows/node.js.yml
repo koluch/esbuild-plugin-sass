@@ -30,7 +30,7 @@ jobs:
     - run: npm test
 
   all-checks-passed:
-
+    runs-on: ubuntu-20.04
     needs: test
     steps:
     - uses: actions/checkout@v2
