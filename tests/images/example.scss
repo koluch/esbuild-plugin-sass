@@ -21,6 +21,6 @@ body {
     background: url("https://should-be-ignored.com/image.png");
   }
   &.pathToLocalSvg {
-    background: url("atom.svg#content"); // we ignore #content at the output path, since esbuild doesn't support it yet
+    background: url("subfolder/c_folder/d_folder/atom.svg#content"); // we ignore #content at the output path, since esbuild doesn't support it yet
   }
 }

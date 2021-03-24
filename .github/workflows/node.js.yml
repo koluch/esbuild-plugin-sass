@@ -10,14 +10,14 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  test:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [10.x, 14.x]
+        runs-on: [windows-2019, ubuntu-20.04]
+
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
     - uses: actions/checkout@v2
@@ -28,3 +28,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+
+  all-checks-passed:
+    runs-on: ubuntu-20.04
+    needs: test
+    steps:
+    - uses: actions/checkout@v2

@@ -4,7 +4,7 @@
   "description": "Plugin for esbuild to support SASS styles",
   "main": "index.js",
   "scripts": {
-    "test": "tape 'tests/*.js' | tap-spec"
+    "test": "tape 'tests/*.js'"
   },
   "author": {
     "name": "Nikolai Mavrenkov",
