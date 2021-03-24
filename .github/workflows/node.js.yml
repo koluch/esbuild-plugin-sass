@@ -12,12 +12,12 @@ on:
 jobs:
   build:
 
-    runs-on: windows-2019
-
     strategy:
       matrix:
         node-version: [10.x, 14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        runs-on: [windows-2019, ubuntu-latest]
+
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
     - uses: actions/checkout@v2
