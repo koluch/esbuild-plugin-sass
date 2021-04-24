@@ -42,6 +42,7 @@ export = (options: Options = {}): Plugin => ({
 
         return {
           path: tmpFilePath,
+          watchFiles: [sourceFullPath],
         };
       }
     );
