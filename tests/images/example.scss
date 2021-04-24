@@ -15,7 +15,7 @@ body {
     background: url("/images/image.png"); // relative to tests root, since we set working dir to test dir everytime
   }
   &.dataUrl {
-    background: url("data:should_be_ignored");
+    background: url("data:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==");
   }
   &.absoluteUrl {
     background: url("https://should-be-ignored.com/image.png");
