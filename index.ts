@@ -1,5 +1,6 @@
 import { Plugin } from "esbuild";
 import { CssNode } from "css-tree";
+import globToRegExp from "glob-to-regexp";
 import fs = require("fs-extra");
 import sass = require("sass");
 import util = require("util");
@@ -11,12 +12,13 @@ const sassRender = util.promisify(sass.render);
 
 interface Options {
   rootDir?: string;
+  externals?: string[];
 }
 
 export = (options: Options = {}): Plugin => ({
   name: "sass",
   setup: function (build) {
-    const { rootDir = process.cwd() } = options;
+    const { rootDir = process.cwd(), externals = [] } = options;
     const tmpDirPath = tmp.dirSync().name;
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
@@ -35,7 +37,13 @@ export = (options: Options = {}): Plugin => ({
         let css = (await sassRender({ file: sourceFullPath })).css.toString();
 
         // Replace all relative urls
-        css = await replaceUrls(css, tmpFilePath, sourceDir, rootDir);
+        css = await replaceUrls(
+          css,
+          tmpFilePath,
+          sourceDir,
+          rootDir,
+          externals
+        );
 
         // Write result file
         await fs.writeFile(tmpFilePath, css);
@@ -53,7 +61,8 @@ async function replaceUrls(
   css: string,
   newCssFileName: string,
   sourceDir: string,
-  rootDir: string
+  rootDir: string,
+  externals: string[]
 ): Promise<string> {
   const ast = csstree.parse(css);
 
@@ -83,6 +92,10 @@ async function replaceUrls(
 
         const normalizedUrl =
           value.type === "String" ? normalizeQuotes(value.value) : value.value;
+
+        if (isExternal(normalizedUrl, externals)) {
+          return;
+        }
 
         if (isLocalFileUrl(normalizedUrl)) {
           const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);
@@ -115,6 +128,13 @@ function isLocalFileUrl(url: string): boolean {
   }
 
   return true;
+}
+
+function isExternal(url: string, externals: string[]): boolean {
+  return externals.some((external) => {
+    const re = globToRegExp(external);
+    return re.test(url);
+  });
 }
 
 function normalizeQuotes(stringValue: string): string {
