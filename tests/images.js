@@ -15,6 +15,7 @@ test("resolving images", function (t) {
       bundle: true,
       outfile: ".output/bundle.js",
       loader: { ".png": "file", ".svg": "file" },
+      external: ["/external/*"],
       plugins: [sassPlugin()],
     });
 

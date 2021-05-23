@@ -1,6 +1,6 @@
 import { Plugin } from "esbuild";
 import { CssNode } from "css-tree";
-import globToRegExp from "glob-to-regexp";
+import { compilePatterns, isExternal, WildcardPattern } from "./internals/external";
 import fs = require("fs-extra");
 import sass = require("sass");
 import util = require("util");
@@ -12,13 +12,13 @@ const sassRender = util.promisify(sass.render);
 
 interface Options {
   rootDir?: string;
-  externals?: string[];
 }
 
 export = (options: Options = {}): Plugin => ({
   name: "sass",
   setup: function (build) {
-    const { rootDir = process.cwd(), externals = [] } = options;
+    const { rootDir = process.cwd() } = options;
+    const { external = [] } = build.initialOptions;
     const tmpDirPath = tmp.dirSync().name;
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
@@ -42,7 +42,7 @@ export = (options: Options = {}): Plugin => ({
           tmpFilePath,
           sourceDir,
           rootDir,
-          externals
+          compilePatterns(external)
         );
 
         // Write result file
@@ -62,7 +62,7 @@ async function replaceUrls(
   newCssFileName: string,
   sourceDir: string,
   rootDir: string,
-  externals: string[]
+  externals: WildcardPattern[]
 ): Promise<string> {
   const ast = csstree.parse(css);
 
@@ -128,13 +128,6 @@ function isLocalFileUrl(url: string): boolean {
   }
 
   return true;
-}
-
-function isExternal(url: string, externals: string[]): boolean {
-  return externals.some((external) => {
-    const re = globToRegExp(external);
-    return re.test(url);
-  });
 }
 
 function normalizeQuotes(stringValue: string): string {
