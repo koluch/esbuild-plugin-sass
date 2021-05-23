@@ -63,6 +63,9 @@
   "files": [
     "index.js",
     "index.d.ts",
-    "index.d.ts.map"
+    "index.d.ts.map",
+    "internals/*.d.js",
+    "internals/*.d.ts",
+    "internals/*.d.ts.map"
   ]
 }

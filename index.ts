@@ -1,5 +1,6 @@
 import { Plugin } from "esbuild";
 import { CssNode } from "css-tree";
+import { compilePatterns, isExternal, WildcardPattern } from "./internals/external";
 import fs = require("fs-extra");
 import sass = require("sass");
 import util = require("util");
@@ -17,6 +18,7 @@ export = (options: Options = {}): Plugin => ({
   name: "sass",
   setup: function (build) {
     const { rootDir = process.cwd() } = options;
+    const { external = [] } = build.initialOptions;
     const tmpDirPath = tmp.dirSync().name;
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
@@ -35,7 +37,13 @@ export = (options: Options = {}): Plugin => ({
         let css = (await sassRender({ file: sourceFullPath })).css.toString();
 
         // Replace all relative urls
-        css = await replaceUrls(css, tmpFilePath, sourceDir, rootDir);
+        css = await replaceUrls(
+          css,
+          tmpFilePath,
+          sourceDir,
+          rootDir,
+          compilePatterns(external)
+        );
 
         // Write result file
         await fs.writeFile(tmpFilePath, css);
@@ -53,7 +61,8 @@ async function replaceUrls(
   css: string,
   newCssFileName: string,
   sourceDir: string,
-  rootDir: string
+  rootDir: string,
+  externals: WildcardPattern[]
 ): Promise<string> {
   const ast = csstree.parse(css);
 
@@ -83,6 +92,10 @@ async function replaceUrls(
 
         const normalizedUrl =
           value.type === "String" ? normalizeQuotes(value.value) : value.value;
+
+        if (isExternal(normalizedUrl, externals)) {
+          return;
+        }
 
         if (isLocalFileUrl(normalizedUrl)) {
           const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);

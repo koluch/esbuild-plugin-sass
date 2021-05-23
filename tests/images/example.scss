@@ -23,4 +23,7 @@ body {
   &.pathToLocalSvg {
     background: url("subfolder/c_folder/d_folder/atom.svg#content"); // we ignore #content at the output path, since esbuild doesn't support it yet
   }
+  &.externalUrls {
+    background: url("/external/should-be-ignored.png");
+  }
 }
