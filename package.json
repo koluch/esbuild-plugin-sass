@@ -7,7 +7,7 @@
   "scripts": {
     "all": "npm-run-all --serial --print-label",
     "build": "tsc",
-    "test:unit": "tape 'tests/*.js'",
+    "test:unit": "tape \"tests/*.js\"",
     "test": "npm run all build test:*",
     "prepare": "npm run build"
   },
