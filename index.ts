@@ -82,7 +82,7 @@ async function replaceUrls(
             if (isLocalFileUrl(normalizedUrl)) {
               const resolved = resolveUrl(normalizedUrl, sourceDir, rootDir);
               const relativePath = path.relative(newCssFileName, resolved.file);
-              urlNode.value = `"${relativePath}"`;
+              urlNode.value = `"${fixCssUrl(relativePath)}"`;
             }
           }
         }
@@ -106,7 +106,7 @@ async function replaceUrls(
             type: "String",
             // disable keeping query and hash parts of original url, since esbuild doesn't support it yet
             // value: `"${relativePath}${resolved.query}${resolved.hash}"`,
-            value: `"${relativePath}"`,
+            value: `"${fixCssUrl(relativePath)}"`,
           };
         }
       }
@@ -133,6 +133,12 @@ function isLocalFileUrl(url: string): boolean {
 function normalizeQuotes(stringValue: string): string {
   const match = stringValue.match(/^['"](.*)["']$/s);
   return match != null ? match[1] ?? "" : stringValue;
+}
+
+// Always use unix-style path separator (/) in urls in CSS, since Windows-style
+// separator doesn't work on Windows
+function fixCssUrl(filePath: string): string {
+  return filePath.split(path.sep).join('/')
 }
 
 function resolveUrl(
