@@ -3,6 +3,10 @@
 
 name: Node.js CI
 
+defaults:
+  run:
+    shell: bash
+
 on:
   push:
     branches: [ main ]
