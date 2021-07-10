@@ -7,7 +7,9 @@
   "scripts": {
     "all": "npm-run-all --serial --print-label",
     "build": "tsc",
+    "test:prepare": "rm -rf ./package/ && FILE=$(npm pack 2>&1 | tail -1) && tar -xf $FILE",
     "test:unit": "tape \"tests/*.js\"",
+    "test:clean": "rm -f *.tgz && rm -rf ./package",
     "test": "npm run all build test:*",
     "prepare": "npm run build"
   },
