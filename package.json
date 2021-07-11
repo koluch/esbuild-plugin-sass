@@ -7,9 +7,9 @@
   "scripts": {
     "all": "npm-run-all --serial --print-label",
     "build": "tsc",
-    "test:prepare": "rm -rf ./package/ && FILE=$(npm pack 2>&1 | tail -1) && tar -xf $FILE",
+    "test:prepare": "npx pack-to-folder --renameTo=.npm-package",
     "test:unit": "tape \"tests/*.js\"",
-    "test:clean": "rm -f *.tgz && rm -rf ./package",
+    "test:clean": "npx rimraf .npm-package",
     "test": "npm run all build test:*",
     "prepare": "npm run build"
   },
@@ -47,7 +47,9 @@
     "husky": "^4.3.7",
     "lint-staged": "^10.5.3",
     "npm-run-all": "^4.1.5",
+    "pack-to-folder": "0.0.3",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "tap-spec": "^5.0.0",
     "tape": "^5.1.1",
     "typescript": "^4.2.3"
