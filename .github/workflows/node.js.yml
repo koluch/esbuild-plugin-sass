@@ -3,6 +3,10 @@
 
 name: Node.js CI
 
+defaults:
+  run:
+    shell: bash
+
 on:
   push:
     branches: [ main ]
@@ -28,6 +32,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+      shell: bash
 
   all-checks-passed:
     runs-on: ubuntu-20.04

@@ -4,7 +4,7 @@ const fs = require("fs-extra");
 
 process.chdir(path.resolve(__dirname));
 
-const sassPlugin = require("../index.js");
+const sassPlugin = require("../.npm-package/index.js");
 
 test("simplest case", function (t) {
   (async () => {
