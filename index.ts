@@ -10,14 +10,14 @@ import csstree = require("css-tree");
 
 const sassRender = util.promisify(sass.render);
 
-interface Options {
+interface Options extends sass.Options {
   rootDir?: string;
 }
 
 export = (options: Options = {}): Plugin => ({
   name: "sass",
   setup: function (build) {
-    const { rootDir = process.cwd() } = options;
+    const { rootDir = process.cwd(), ...sassOptions } = options;
     const { external = [] } = build.initialOptions;
     const tmpDirPath = tmp.dirSync().name;
     build.onResolve(
@@ -34,7 +34,7 @@ export = (options: Options = {}): Plugin => ({
         await fs.ensureDir(tmpDir);
 
         // Compile SASS to CSS
-        let css = (await sassRender({ file: sourceFullPath })).css.toString();
+        let css = (await sassRender({ ...sassOptions, file: sourceFullPath })).css.toString();
 
         // Replace all relative urls
         css = await replaceUrls(
