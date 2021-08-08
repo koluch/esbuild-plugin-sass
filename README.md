@@ -28,7 +28,6 @@ Create file `src/index.js`:
 import './test.scss'
 ```
 
-
 Create file `build.js`:
 
 ```js
@@ -56,3 +55,24 @@ body.isRed {
   background: red;
 }
 ```
+
+# API
+
+Module default-exports a function, which need to be called with or without options object:
+
+```typescript
+import sass = require("sass");
+
+interface Options {
+  rootDir?: string
+  customSassOptions?: Omit<sass.Options, 'file'>
+}
+
+export = (options: Options = {}) => Plugin
+```
+
+Supported options:
+
+- `rootDir` - folder to resolve pathes against
+  
+- `customSassOptions` - options object passed to `sass` [render](https://sass-lang.com/documentation/js-api#render) function, except `file` option, which is overriden by plugin for each processed file
