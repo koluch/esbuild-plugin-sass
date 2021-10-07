@@ -2,12 +2,12 @@
 
 ![Node.js CI](https://github.com/koluch/esbuild-plugin-sass/workflows/Node.js%20CI/badge.svg)
 
-Plugin for [esbuild](https://esbuild.github.io/) to support SASS styles
+Plugin for [esbuild](https://esbuild.github.io/) to support Sass/SCSS style sheets
 
 ## Install
 
-```bash
-npm i esbuild esbuild-plugin-sass
+```console
+$ npm i esbuild esbuild-plugin-sass
 ```
 
 ## Usage example
@@ -31,7 +31,7 @@ import './test.scss'
 Create file `build.js`:
 
 ```js
-const esbuild = require('esbuild');
+const esbuild = require('esbuild')
 const sassPlugin = require('esbuild-plugin-sass')
 
 esbuild.build({
@@ -44,8 +44,8 @@ esbuild.build({
 
 Run:
 
-```bash
-node build.js
+```console
+$ node build.js
 ```
 
 File named `bundle.css` with following content will be created:
@@ -73,6 +73,6 @@ export = (options: Options = {}) => Plugin
 
 Supported options:
 
-- `rootDir` - folder to resolve pathes against
+- `rootDir` - folder to resolve patches against
   
 - `customSassOptions` - options object passed to `sass` [render](https://sass-lang.com/documentation/js-api#render) function, except `file` option, which is overriden by plugin for each processed file
