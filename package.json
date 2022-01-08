@@ -31,7 +31,7 @@
   "dependencies": {
     "css-tree": "1.1.2",
     "fs-extra": "9.0.1",
-    "sass": "1.32.4",
+    "sass": "1.47.0",
     "tmp": "0.2.1"
   },
   "peerDependencies": {
@@ -41,7 +41,7 @@
     "@types/css-tree": "1.0.5",
     "@types/fs-extra": "9.0.8",
     "@types/node": "14.14.35",
-    "@types/sass": "1.16.0",
+    "@types/sass": "1.43.1",
     "@types/tmp": "0.2.0",
     "esbuild": "0.11.14",
     "husky": "4.3.7",
