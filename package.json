@@ -38,20 +38,20 @@
     "esbuild": ">=0.11.14"
   },
   "devDependencies": {
-    "@types/css-tree": "1.0.5",
-    "@types/fs-extra": "9.0.8",
+    "@types/css-tree": "1.0.7",
+    "@types/fs-extra": "9.0.13",
     "@types/node": "14.14.35",
     "@types/sass": "1.43.1",
-    "@types/tmp": "0.2.0",
-    "esbuild": "0.11.14",
+    "@types/tmp": "0.2.3",
+    "esbuild": "0.14.10",
     "husky": "4.3.7",
     "lint-staged": "10.5.3",
     "npm-run-all": "4.1.5",
     "pack-to-folder": "1.0.0",
-    "prettier": "2.2.1",
+    "prettier": "2.5.1",
     "rimraf": "3.0.2",
-    "tape": "5.1.1",
-    "typescript": "4.2.3"
+    "tape": "5.4.0",
+    "typescript": "4.5.4"
   },
   "husky": {
     "hooks": {
