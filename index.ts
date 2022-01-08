@@ -2,7 +2,6 @@ import { Plugin } from "esbuild";
 import { CssNode } from "css-tree";
 import { compilePatterns, isExternal, WildcardPattern } from "./internals/external";
 import fs = require("fs-extra");
-import glob = require("glob");
 import sass = require("sass");
 import util = require("util");
 import tmp = require("tmp");
@@ -32,14 +31,14 @@ export = (options: Options = {}): Plugin => ({
         const sourceBaseName = path.basename(sourceFullPath, sourceExt);
         const sourceDir = path.dirname(sourceFullPath);
         const sourceRelDir = path.relative(path.dirname(rootDir), sourceDir);
-        const sassFilePaths = await glob.sync(`${sourceDir}/**/*.?(sass|scss)`);
 
         const tmpDir = path.resolve(tmpDirPath, sourceRelDir);
         const tmpFilePath = path.resolve(tmpDir, `${sourceBaseName}.css`);
         await fs.ensureDir(tmpDir);
 
         // Compile SASS to CSS
-        let css = (await sassRender({ ...customSassOptions, file: sourceFullPath })).css.toString();
+        const sassRenderResult = await sassRender({ ...customSassOptions, file: sourceFullPath });
+        let css = sassRenderResult.css.toString();
 
         // Replace all relative urls
         css = await replaceUrls(
@@ -55,7 +54,7 @@ export = (options: Options = {}): Plugin => ({
 
         return {
           path: tmpFilePath,
-          watchFiles: sassFilePaths,
+          watchFiles: sassRenderResult.stats.includedFiles,
         };
       }
     );
