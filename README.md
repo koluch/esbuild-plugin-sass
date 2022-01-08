@@ -7,13 +7,13 @@ Plugin for [esbuild](https://esbuild.github.io/) to support Sass style sheets
 ## Install
 
 ```shell
-npm i esbuild esbuild-plugin-sass
+npm i --save-dev esbuild esbuild-plugin-sass
 ```
 
 or, using [pnpm](https://pnpm.io/):
 
 ```shell
-pnpm add esbuild esbuild-plugin-sass
+pnpm add --save-dev esbuild esbuild-plugin-sass
 ```
 
 ## Usage example
