@@ -7,11 +7,11 @@
   "scripts": {
     "all": "npm-run-all --serial --print-label",
     "build": "tsc",
-    "test:prepare": "npx pack-to-folder --renameTo=.npm-package --forceRewrite",
+    "test:prepare": "pnpm exec pack-to-folder --renameTo=.npm-package --forceRewrite",
     "test:unit": "tape \"tests/*.js\"",
-    "test:clean": "npx rimraf .npm-package",
-    "test": "npm run all build test:*",
-    "prepare": "npm run build"
+    "test:clean": "pnpm exec rimraf .npm-package",
+    "test": "pnpm run all build test:*",
+    "prepare": "pnpm run build"
   },
   "author": {
     "name": "Nikolai Mavrenkov",
