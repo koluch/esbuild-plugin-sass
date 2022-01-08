@@ -27,7 +27,9 @@ export = (options: Options = {}): Plugin => ({
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
       async (args) => {
-        const sourceFullPath = path.resolve(args.resolveDir, args.path);
+        const sourceFullPath = require.resolve(args.path, {
+          paths: [args.resolveDir],
+        });
         const sourceExt = path.extname(sourceFullPath);
         const sourceBaseName = path.basename(sourceFullPath, sourceExt);
         const sourceDir = path.dirname(sourceFullPath);
