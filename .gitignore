@@ -1,9 +1,9 @@
-node_modules
+/node_modules
 .output
 .npm-package
-index.js
-index.d.ts
-index.d.ts.map
+/index.js
+/index.d.ts
+/index.d.ts.map
 internals/*.js
 internals/*.d.ts
 internals/*.d.ts.map
