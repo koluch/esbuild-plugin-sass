@@ -37,7 +37,8 @@ export = (options: Options = {}): Plugin => ({
         await fs.ensureDir(tmpDir);
 
         // Compile SASS to CSS
-        let css = (await sassRender({ ...customSassOptions, file: sourceFullPath })).css.toString();
+        const sassRenderResult = await sassRender({ ...customSassOptions, file: sourceFullPath });
+        let css = sassRenderResult.css.toString();
 
         // Replace all relative urls
         css = await replaceUrls(
@@ -53,7 +54,7 @@ export = (options: Options = {}): Plugin => ({
 
         return {
           path: tmpFilePath,
-          watchFiles: [sourceFullPath],
+          watchFiles: sassRenderResult.stats.includedFiles,
         };
       }
     );
