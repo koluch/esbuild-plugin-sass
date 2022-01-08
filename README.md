@@ -2,11 +2,11 @@
 
 ![Node.js CI](https://github.com/koluch/esbuild-plugin-sass/workflows/Node.js%20CI/badge.svg)
 
-Plugin for [esbuild](https://esbuild.github.io/) to support SASS styles
+Plugin for [esbuild](https://esbuild.github.io/) to support Sass style sheets
 
 ## Install
 
-```bash
+```shell
 npm i esbuild esbuild-plugin-sass
 ```
 
@@ -25,27 +25,29 @@ body {
 Create file `src/index.js`:
 
 ```js
-import './test.scss'
+import "./test.scss";
 ```
 
 Create file `build.js`:
 
 ```js
-const esbuild = require('esbuild');
-const sassPlugin = require('esbuild-plugin-sass')
+const esbuild = require("esbuild");
+const sassPlugin = require("esbuild-plugin-sass");
 
-esbuild.build({
-    entryPoints: ['src/index.js'],
+esbuild
+  .build({
+    entryPoints: ["src/index.js"],
     bundle: true,
-    outfile: 'bundle.js',
+    outfile: "bundle.js",
     plugins: [sassPlugin()],
-}).catch((e) => console.error(e.message))
+  })
+  .catch((e) => console.error(e.message));
 ```
 
 Run:
 
-```bash
-node build.js
+```console
+$ node build.js
 ```
 
 File named `bundle.css` with following content will be created:
@@ -64,15 +66,14 @@ Module default-exports a function, which need to be called with or without optio
 import sass = require("sass");
 
 interface Options {
-  rootDir?: string
-  customSassOptions?: Omit<sass.Options, 'file'>
+  rootDir?: string;
+  customSassOptions?: Omit<sass.Options, "file">;
 }
 
-export = (options: Options = {}) => Plugin
+export = (options: Options = {}) => Plugin;
 ```
 
 Supported options:
 
-- `rootDir` - folder to resolve pathes against
-  
+- `rootDir` - folder to resolve paths against
 - `customSassOptions` - options object passed to `sass` [render](https://sass-lang.com/documentation/js-api#render) function, except `file` option, which is overriden by plugin for each processed file
