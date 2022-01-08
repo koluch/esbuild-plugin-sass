@@ -6,9 +6,9 @@
   "types": "index.d.ts",
   "scripts": {
     "all": "npm-run-all --serial --print-label",
-    "build": "tsc",
+    "build": "pnpm exec tsc",
     "test:prepare": "pnpm exec pack-to-folder --renameTo=.npm-package --forceRewrite",
-    "test:unit": "tape \"tests/*.js\"",
+    "test:unit": "pnpm exec tape \"tests/*.js\"",
     "test:clean": "pnpm exec rimraf .npm-package",
     "test": "pnpm run all build test:*",
     "prepare": "pnpm run build"
@@ -56,7 +56,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx lint-staged"
+      "pre-commit": "pnpm exec lint-staged"
     }
   },
   "lint-staged": {
