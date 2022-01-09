@@ -1,20 +1,21 @@
 import { Plugin } from "esbuild";
 import { CssNode } from "css-tree";
-import { compilePatterns, isExternal, WildcardPattern } from "./internals/external";
+import {
+  compilePatterns,
+  isExternal,
+  WildcardPattern,
+} from "./internals/external";
 import fs = require("fs-extra");
 import sass = require("sass");
-import util = require("util");
 import tmp = require("tmp");
 import path = require("path");
 import csstree = require("css-tree");
 
-const sassRender = util.promisify(sass.render);
-
-type SassOptions = Omit<sass.Options, 'file'>
+type SassOptions = Omit<sass.Options<"sync">, "file">;
 
 interface Options {
   rootDir?: string;
-  customSassOptions?: SassOptions
+  customSassOptions?: SassOptions;
 }
 
 export = (options: Options = {}): Plugin => ({
@@ -26,7 +27,9 @@ export = (options: Options = {}): Plugin => ({
     build.onResolve(
       { filter: /.\.(scss|sass)$/, namespace: "file" },
       async (args) => {
-        const sourceFullPath = path.resolve(args.resolveDir, args.path);
+        const sourceFullPath = require.resolve(args.path, {
+          paths: [args.resolveDir],
+        });
         const sourceExt = path.extname(sourceFullPath);
         const sourceBaseName = path.basename(sourceFullPath, sourceExt);
         const sourceDir = path.dirname(sourceFullPath);
@@ -37,7 +40,11 @@ export = (options: Options = {}): Plugin => ({
         await fs.ensureDir(tmpDir);
 
         // Compile SASS to CSS
-        const sassRenderResult = await sassRender({ ...customSassOptions, file: sourceFullPath });
+        const sassRenderResult = await sass.compile(
+          sourceFullPath,
+          customSassOptions
+        );
+
         let css = sassRenderResult.css.toString();
 
         // Replace all relative urls
@@ -54,7 +61,9 @@ export = (options: Options = {}): Plugin => ({
 
         return {
           path: tmpFilePath,
-          watchFiles: sassRenderResult.stats.includedFiles,
+          watchFiles: sassRenderResult.loadedUrls
+            .filter((x) => x.protocol === "file:")
+            .map((x) => x.pathname),
         };
       }
     );
@@ -142,7 +151,7 @@ function normalizeQuotes(stringValue: string): string {
 // Always use unix-style path separator (/) in urls in CSS, since Windows-style
 // separator doesn't work on Windows
 function fixCssUrl(filePath: string): string {
-  return filePath.split(path.sep).join('/')
+  return filePath.split(path.sep).join("/");
 }
 
 function resolveUrl(
