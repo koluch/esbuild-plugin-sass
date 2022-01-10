@@ -8,8 +8,6 @@ defaults:
     shell: bash
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
 
@@ -29,7 +27,7 @@ jobs:
       with:
         version: 6.25.0
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
