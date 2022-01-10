@@ -1,4 +1,4 @@
-Please, make sure you did all these steps before submitting PR:
+Please, make sure you did all these steps when submitting PR:
 
 - [ ] Update CHANGELOG.md, if needed
 - [ ] Update README.md, if needed
