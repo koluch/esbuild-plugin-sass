@@ -82,4 +82,4 @@ export = (options: Options = {}) => Plugin;
 Supported options:
 
 - `rootDir` - folder to resolve paths against
-- `customSassOptions` - options object passed to `sass` [render](https://sass-lang.com/documentation/js-api#render) function, except `file` option, which is overriden by plugin for each processed file
+- `customSassOptions` - options object passed to `sass` [compile](https://sass-lang.com/documentation/js-api/modules#compile) function, except `file` option, which is overriden by plugin for each processed file
