@@ -20,6 +20,9 @@ body {
   &.absoluteUrl {
     background: url("https://should-be-ignored.com/image.png");
   }
+  &.absolutePath {
+    background: url("/should-be-ignored/image.png");
+  }
   &.pathToLocalSvg {
     background: url("subfolder/c_folder/d_folder/atom.svg#content"); // we ignore #content at the output path, since esbuild doesn't support it yet
   }

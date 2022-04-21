@@ -21,3 +21,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move to pnpm package manager
 - Move to [new workflow](https://thomaspoignant.medium.com/simple-git-flow-who-works-dac82430e484)
 - Update dependencies
+- Ignore paths starting with `/`

@@ -139,6 +139,9 @@ function isLocalFileUrl(url: string): boolean {
   if (/^#/.test(url)) {
     return false;
   }
+  if (url.startsWith('/')) {
+    return false;
+  }
 
   return true;
 }
