@@ -10,6 +10,7 @@ import sass = require("sass");
 import tmp = require("tmp");
 import path = require("path");
 import csstree = require("css-tree");
+import url = require("url");
 
 type SassOptions = Omit<sass.Options<"sync">, "file">;
 
@@ -63,7 +64,7 @@ export = (options: Options = {}): Plugin => ({
           path: tmpFilePath,
           watchFiles: sassRenderResult.loadedUrls
             .filter((x) => x.protocol === "file:")
-            .map((x) => x.pathname),
+            .map(url.fileURLToPath),
         };
       }
     );
